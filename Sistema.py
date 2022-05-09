@@ -104,10 +104,7 @@ while True:
                 print(i+1, '- ', lista[i], '\n')
 
             opcao = int(input('PREDEFINIÇÃO: '))
-
             selecao = lista[opcao-1]
-
-
 
             system('pause')
 
@@ -117,8 +114,11 @@ while True:
             nome = input('Informe o nome da predefinição:')
             arq = open('predefinicoes.txt', 'a')
 
-            #arq.write(nome + str(documento.dictionary.keys()) + '\n')
-            print(documento.dictionary.keys())
+            predefinicao = str(documento.dictionary.keys())
+            predefinicao = predefinicao.replace('dict_keys(', '')
+            predefinicao = predefinicao.replace(')', '')
+            arq.write(nome + predefinicao + '\n')
+            print(str(documento.dictionary.keys()))
             arq.close()
 
         elif option == '8': #EXCLUIR PREDEFINICAO
@@ -132,7 +132,6 @@ while True:
                 print(i)
 
             system('pause')
-
 
     except IndexError:
         print('\nAlgo deu errado !')
