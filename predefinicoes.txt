@@ -1,0 +1,2 @@
+oficio de teste{'nome de guerra': 'gabriel soardi machado', 'graduacao': 'sargento', 'org militar': '9 blog', 'rg': '8122228862'}
+oficio documento{'xx': '01', 'iii': '8122228862', 'ccc': '034.070.900-64', 'hhh': '0102030405', 'nnn': 'gabriel soardi machado'}

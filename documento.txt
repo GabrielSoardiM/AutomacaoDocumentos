@@ -1,0 +1,9 @@
+C:\Users\evil4\Desktop\Gabriel\Programacao\Python\AutomacaoDocumento\documento.txt
+OFICIO N° xx
+
+isencao de taxas
+
+NOME: nnn
+IDENTIDADE: iii
+CPF: ccc
+CNH: hhh
