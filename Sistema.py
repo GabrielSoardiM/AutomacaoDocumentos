@@ -2,8 +2,15 @@ from os import system
 import Manipulador
 
 novo_documento = True
+arquivo_predefinicao = 'predefinicoes.txt'
 option = None
 documento = Manipulador.manipulador()
+
+def build_file(diretorio):
+    if not verify(diretorio):
+        arq = open(diretorio, 'a')
+        arq.write('')
+        arq.close()
 
 def open_file(directory):
     system('start {}'.format(directory))
@@ -44,6 +51,8 @@ def verify(directory):
 while True:
     system('cls')
 
+    build_file(arquivo_predefinicao)
+
     print('Bem vindo ao sistema de automação de documentos !\n')
 
     if novo_documento:
@@ -62,9 +71,9 @@ while True:
         option = input('OPÇÃO:')
 
     try:
-        if option == '1': #FUNCIONANDO
+        if option == '1': #Novo Documento
             novo_documento = True
-        elif option == '2': #FUNCIONANDO
+        elif option == '2': #Abrir arquivo
             if documento.file != '':
                 open_file(documento.file)
             else:
@@ -83,13 +92,13 @@ while True:
                             system('pause')
                             break
 
-        elif option == '3': #FUNCIONANDO
+        elif option == '3': #Definir referencias
             documento.set_reference()
 
-        elif option == '4': #FUNCIONANDO
+        elif option == '4': #Definir dados
             documento.set_dados()
 
-        elif option == '5': #FUNCIONANDO
+        elif option == '5': #Mostrar dados
             system('cls')
 
             for i in documento.dictionary.items():
@@ -97,11 +106,11 @@ while True:
 
             system('pause')
 
-        elif option == '6': #FUNCIONANDO
+        elif option == '6': #Selecionar predefinicoes
             system('cls')
             predefinicao = {}
 
-            lista = get_list('predefinicoes.txt')
+            lista = get_list(arquivo_predefinicao)
 
             for i in range(0, len(lista)):
                 print(i+1, '- ', lista[i], '\n')
@@ -109,7 +118,7 @@ while True:
             opcao = int(input('PREDEFINIÇÃO: '))
             selecao = lista[opcao-1]
 
-            arq = open('predefinicoes.txt', 'r')
+            arq = open(arquivo_predefinicao, 'r')
 
             for i in arq:
                 valores = str(i).split('\'')
@@ -125,23 +134,22 @@ while True:
 
             system('pause')
 
-        elif option == '7': #FUNCIONANDO
+        elif option == '7': #Gravar predefinicao
             system('cls')
 
             nome = input('Informe o nome da predefinição:')
-            arq = open('predefinicoes.txt', 'a')
+            arq = open(arquivo_predefinicao, 'a')
 
             predefinicao = str(documento.dictionary.keys())
             predefinicao = predefinicao.replace('dict_keys(', '')
             predefinicao = predefinicao.replace(')', '')
             arq.write(nome + predefinicao + '\n')
-            print(str(documento.dictionary.keys()))
             arq.close()
 
-        elif option == '8': #FUNCIONANDO
+        elif option == '8': #Excluir predefinicao
             system('cls')
 
-            lista = get_list('predefinicoes.txt')
+            lista = get_list(arquivo_predefinicao)
 
             for i in lista:
                 print(i)
@@ -150,25 +158,29 @@ while True:
 
             for ii in lista:
                 if escolha in ii:
-                    arq_read = open('predefinicoes.txt', 'r')
+                    arq_read = open(arquivo_predefinicao, 'r')
 
                     txt = arq_read.read()
-                    prox_index = lista.index(ii)+1
-                    prox_predefinicao = lista[prox_index]
-                    predefinicao_escolhida = txt[txt.index(ii):txt.index(prox_predefinicao)]
+
+                    try:
+                        prox_index = lista.index(ii)+1
+                        prox_predefinicao = lista[prox_index]
+                        predefinicao_escolhida = txt[txt.index(ii):txt.index(prox_predefinicao)]
+                    except IndexError:
+                        predefinicao_escolhida = txt[txt.index(ii):]
 
                     txt = txt.replace(predefinicao_escolhida, '')
 
-                    arq = open('predefinicoes.txt', 'w')
+                    arq = open(arquivo_predefinicao, 'w')
                     arq.write(txt)
 
                     arq.close()
                     arq_read.close()
 
-        elif option == '9': #FUNCIONANDO
+        elif option == '9': #Listar predefinicoes
             system('cls')
 
-            lista = get_list('predefinicoes.txt')
+            lista = get_list(arquivo_predefinicao)
 
             for i in lista:
                 print(i)
@@ -176,7 +188,7 @@ while True:
 
             system('pause')
 
-        elif option == '10':
+        elif option == '10': #Salvar Dados
             documento.save_dados(documento.dictionary)
 
     except Exception:
