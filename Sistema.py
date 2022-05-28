@@ -21,7 +21,7 @@ def get_list(directory):
             if linha == '' or linha == None:
                 break
 
-            lista.append(linha[0:linha.index('{')])
+            lista.append(linha[0:linha.index('[')])
 
         arq.close()
 
@@ -88,7 +88,7 @@ while True:
         elif option == '4': #FUNCIONANDO
             documento.set_dados()
 
-        elif option == '5': #CONFERIR DADOS
+        elif option == '5': #FUNCIONANDO
             system('cls')
 
             for i in documento.dictionary.items():
@@ -121,18 +121,42 @@ while True:
             print(str(documento.dictionary.keys()))
             arq.close()
 
-        elif option == '8': #EXCLUIR PREDEFINICAO
-            pass
-
-        elif option == '9': #FUNCIONANDO
-            system('cls')
+        elif option == '8': #FUNCIONANDO
             lista = get_list('predefinicoes.txt')
 
             for i in lista:
                 print(i)
 
+            escolha = input('INFORME A PREDEFINIÇÃO A SER ESCOLHIDA: ')
+
+            for ii in lista:
+                if escolha in ii:
+                    arq_read = open('predefinicoes.txt', 'r')
+
+                    txt = arq_read.read()
+                    prox_index = lista.index(ii)+1
+                    prox_predefinicao = lista[prox_index]
+                    predefinicao_escolhida = txt[txt.index(ii):txt.index(prox_predefinicao)]
+
+                    txt = txt.replace(predefinicao_escolhida, '')
+
+                    arq = open('predefinicoes.txt', 'w')
+                    arq.write(txt)
+
+                    arq.close()
+                    arq_read.close()
+
+        elif option == '9': #FUNCIONANDO
+            system('cls')
+
+            lista = get_list('predefinicoes.txt')
+
+            for i in lista:
+                print(i)
+                pass
+
             system('pause')
 
-    except IndexError:
+    except Exception:
         print('\nAlgo deu errado !')
         system('pause')
