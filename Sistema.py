@@ -56,7 +56,8 @@ while True:
     else:
         print('MENU\n\n(1) - NOVO DOCUMENTO\n(2) - ABRIR O DOCUMENTO\n(3) - ADICIONAR REFERÊNCIAS')
         print('(4) - ADICIONAR DADOS\n(5) - CONFERIR DADOS\n(6) - SELECIONAR PREDEFINIÇÃO')
-        print('(7) - ADICIONAR PREDEFINIÇÃO\n(8) - EXCLUIR PREDEFINIÇÃO\n(9) - LISTA DE PREDEFINIÇÕES\n')
+        print('(7) - ADICIONAR PREDEFINIÇÃO\n(8) - EXCLUIR PREDEFINIÇÃO\n(9) - LISTA DE PREDEFINIÇÕES')
+        print('(10) - GRAVAR NO DOCUMENTO\n')
 
         option = input('OPÇÃO:')
 
@@ -98,6 +99,8 @@ while True:
 
         elif option == '6': #FUNCIONANDO
             system('cls')
+            predefinicao = {}
+
             lista = get_list('predefinicoes.txt')
 
             for i in range(0, len(lista)):
@@ -105,6 +108,20 @@ while True:
 
             opcao = int(input('PREDEFINIÇÃO: '))
             selecao = lista[opcao-1]
+
+            arq = open('predefinicoes.txt', 'r')
+
+            for i in arq:
+                valores = str(i).split('\'')
+                c = 1
+                for j in valores:
+                    if c%2 == 0:
+                        predefinicao.update({valores[c-1]:None})
+                    c += 1
+
+            arq.close()
+
+            documento.set_reference(predefinicao)
 
             system('pause')
 
@@ -122,6 +139,8 @@ while True:
             arq.close()
 
         elif option == '8': #FUNCIONANDO
+            system('cls')
+
             lista = get_list('predefinicoes.txt')
 
             for i in lista:
@@ -156,6 +175,9 @@ while True:
                 pass
 
             system('pause')
+
+        elif option == '10':
+            documento.save_dados(documento.dictionary)
 
     except Exception:
         print('\nAlgo deu errado !')

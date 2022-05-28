@@ -36,3 +36,16 @@ class manipulador():
             dados = input("REFERENCIA {}\nInforme os dados:".format(i))
 
             self.dictionary.update({i: dados})
+
+    def save_dados(self, referencias: dict):
+        arq = open(self.file, 'r')
+        txt = arq.read()
+
+        for i in referencias:
+            txt = txt.replace(i, referencias[i])
+
+        arq.close()
+
+        arq_write = open(self.file, 'w')
+        arq_write.write(txt)
+        arq_write.close()
