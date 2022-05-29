@@ -1,4 +1,6 @@
 from os import system
+import docx
+import os
 
 class manipulador():
     file = ''
@@ -38,14 +40,18 @@ class manipulador():
             self.dictionary.update({i: dados})
 
     def save_dados(self, referencias: dict):
-        arq = open(self.file, 'r')
-        txt = arq.read()
+        if '.txt' in self.file:
+            arq = open(self.file, 'r')
+            txt = arq.read()
 
-        for i in referencias:
-            txt = txt.replace(i, referencias[i])
+            for i in referencias:
+                txt = txt.replace(i, referencias[i])
 
-        arq.close()
+            arq.close()
 
-        arq_write = open(self.file, 'w')
-        arq_write.write(txt)
-        arq_write.close()
+            arq_write = open(self.file, 'w')
+            arq_write.write(txt)
+            arq_write.close()
+        else:
+            pass
+

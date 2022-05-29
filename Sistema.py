@@ -43,9 +43,7 @@ def verify(directory):
         arq.close()
 
         return True
-    except Exception:
-        print('Arquivo não encontrado !')
-
+    except IndexError:
         return False
 
 while True:
@@ -70,127 +68,128 @@ while True:
 
         option = input('OPÇÃO:')
 
-    try:
-        if option == '1': #Novo Documento
-            novo_documento = True
-        elif option == '2': #Abrir arquivo
-            if documento.file != '':
-                open_file(documento.file)
-            else:
-                while True:
-                    try:
-                        system('cls')
-                        documento.set_file(input('INFORME O DIRETORIO: '))
+        try:
+            if option == '1': #Novo Documento
+                novo_documento = True
+            elif option == '2': #Abrir arquivo
+                if documento.file != '':
+                    open_file(documento.file)
+                else:
+                    while True:
+                        try:
+                            system('cls')
+                            documento.set_file(input('INFORME O DIRETORIO: '))
 
-                        arq = open(documento.file, 'r')
+                            arq = open(documento.file, 'r')
+                            arq.close()
+
+                            open_file(documento.file)
+                        except Exception:
+                            if documento.file != '':
+                                print("\nARQUIVO NÃO ENCONTRADO !")
+                                system('pause')
+                                break
+
+            elif option == '3': #Definir referencias
+                documento.set_reference()
+
+            elif option == '4': #Definir dados
+                documento.set_dados()
+
+            elif option == '5': #Mostrar dados
+                system('cls')
+
+                for i in documento.dictionary.items():
+                    print('---\nREFERÊNCIA -> {}\nDADO -> {}\n---'.format(i[0], i[1]))
+
+                system('pause')
+
+            elif option == '6': #Selecionar predefinicoes
+                system('cls')
+                predefinicao = {}
+
+                lista = get_list(arquivo_predefinicao)
+
+                for i in range(0, len(lista)):
+                    print(i+1, '- ', lista[i], '\n')
+
+                opcao = int(input('PREDEFINIÇÃO: '))
+                selecao = lista[opcao-1]
+
+                arq = open(arquivo_predefinicao, 'r')
+
+                for i in arq:
+                    valores = str(i).split('\'')
+                    c = 1
+                    for j in valores:
+                        if c%2 == 0:
+                            predefinicao.update({valores[c-1]:None})
+                        c += 1
+
+                arq.close()
+
+                documento.set_reference(predefinicao)
+
+                system('pause')
+
+            elif option == '7': #Gravar predefinicao
+                system('cls')
+
+                nome = input('Informe o nome da predefinição:')
+                arq = open(arquivo_predefinicao, 'a')
+
+                predefinicao = str(documento.dictionary.keys())
+                predefinicao = predefinicao.replace('dict_keys(', '')
+                predefinicao = predefinicao.replace(')', '')
+                arq.write(nome + predefinicao + '\n')
+                arq.close()
+
+            elif option == '8': #Excluir predefinicao
+                system('cls')
+
+                lista = get_list(arquivo_predefinicao)
+
+                for i in lista:
+                    print(i)
+
+                escolha = input('INFORME A PREDEFINIÇÃO A SER ESCOLHIDA: ')
+
+                for ii in lista:
+                    if escolha in ii:
+                        arq_read = open(arquivo_predefinicao, 'r')
+
+                        txt = arq_read.read()
+
+                        try:
+                            prox_index = lista.index(ii)+1
+                            prox_predefinicao = lista[prox_index]
+                            predefinicao_escolhida = txt[txt.index(ii):txt.index(prox_predefinicao)]
+                        except IndexError:
+                            predefinicao_escolhida = txt[txt.index(ii):]
+
+                        txt = txt.replace(predefinicao_escolhida, '')
+
+                        arq = open(arquivo_predefinicao, 'w')
+                        arq.write(txt)
+
                         arq.close()
+                        arq_read.close()
 
-                        open_file(documento.file)
-                    except Exception:
-                        if documento.file != '':
-                            print("\nARQUIVO NÃO ENCONTRADO !")
-                            system('pause')
-                            break
+            elif option == '9': #Listar predefinicoes
+                system('cls')
 
-        elif option == '3': #Definir referencias
-            documento.set_reference()
+                lista = get_list(arquivo_predefinicao)
 
-        elif option == '4': #Definir dados
-            documento.set_dados()
+                for i in lista:
+                    print(i)
+                    pass
 
-        elif option == '5': #Mostrar dados
-            system('cls')
+                print('\n')
+                system('pause')
 
-            for i in documento.dictionary.items():
-                print('---\nREFERÊNCIA -> {}\nDADO -> {}\n---'.format(i[0], i[1]))
+            elif option == '10': #Salvar Dados
+                documento.save_dados(documento.dictionary)
 
+        except Exception:
+            print('\nAlgo deu errado !')
             system('pause')
-
-        elif option == '6': #Selecionar predefinicoes
-            system('cls')
-            predefinicao = {}
-
-            lista = get_list(arquivo_predefinicao)
-
-            for i in range(0, len(lista)):
-                print(i+1, '- ', lista[i], '\n')
-
-            opcao = int(input('PREDEFINIÇÃO: '))
-            selecao = lista[opcao-1]
-
-            arq = open(arquivo_predefinicao, 'r')
-
-            for i in arq:
-                valores = str(i).split('\'')
-                c = 1
-                for j in valores:
-                    if c%2 == 0:
-                        predefinicao.update({valores[c-1]:None})
-                    c += 1
-
-            arq.close()
-
-            documento.set_reference(predefinicao)
-
-            system('pause')
-
-        elif option == '7': #Gravar predefinicao
-            system('cls')
-
-            nome = input('Informe o nome da predefinição:')
-            arq = open(arquivo_predefinicao, 'a')
-
-            predefinicao = str(documento.dictionary.keys())
-            predefinicao = predefinicao.replace('dict_keys(', '')
-            predefinicao = predefinicao.replace(')', '')
-            arq.write(nome + predefinicao + '\n')
-            arq.close()
-
-        elif option == '8': #Excluir predefinicao
-            system('cls')
-
-            lista = get_list(arquivo_predefinicao)
-
-            for i in lista:
-                print(i)
-
-            escolha = input('INFORME A PREDEFINIÇÃO A SER ESCOLHIDA: ')
-
-            for ii in lista:
-                if escolha in ii:
-                    arq_read = open(arquivo_predefinicao, 'r')
-
-                    txt = arq_read.read()
-
-                    try:
-                        prox_index = lista.index(ii)+1
-                        prox_predefinicao = lista[prox_index]
-                        predefinicao_escolhida = txt[txt.index(ii):txt.index(prox_predefinicao)]
-                    except IndexError:
-                        predefinicao_escolhida = txt[txt.index(ii):]
-
-                    txt = txt.replace(predefinicao_escolhida, '')
-
-                    arq = open(arquivo_predefinicao, 'w')
-                    arq.write(txt)
-
-                    arq.close()
-                    arq_read.close()
-
-        elif option == '9': #Listar predefinicoes
-            system('cls')
-
-            lista = get_list(arquivo_predefinicao)
-
-            for i in lista:
-                print(i)
-                pass
-
-            system('pause')
-
-        elif option == '10': #Salvar Dados
-            documento.save_dados(documento.dictionary)
-
-    except Exception:
-        print('\nAlgo deu errado !')
-        system('pause')
